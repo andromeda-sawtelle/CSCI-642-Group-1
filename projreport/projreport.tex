@@ -1,0 +1,254 @@
+%% The first command in your LaTeX source must be the \documentclass command.
+\documentclass[sigconf, anonymous]{acmart}
+
+\def\BibTeX{\textsc{Bib}\TeX}
+\def\LaTeX{\textsc{La}\TeX}
+\usepackage{url}
+\usepackage{balance}
+\usepackage{color}
+\usepackage{enumerate}
+\settopmatter{printacmref=false}
+
+\setcopyright{none}
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\pagestyle{plain}
+\acmConference[CSCI]{}{Project Report}{2024}
+
+\begin{document}
+\title{Project Report (Rename Appropriately)}
+
+\author{Anonymous}
+\affiliation{
+  \institution{Removed}
+}
+
+\begin{abstract}
+  The abstract is a fancy way to saying {\bf Summary.} It should
+  preferably be two paragraphs that summarize your report. Abstracts
+  are read independently from the rest of the report so you must not
+  cite your report or any other papers. Study other abstracts in the
+  papers you have been reading to understand what an abstract should
+  mean, although many are poorly written.
+
+  The abstract is not an introduction or overview of your report! It is
+  a summary of your report, which should include the background,
+  context, content, and contributions/results of your report. Make
+  sure you only take credit for what you did (which is the comparison
+  and your learning) and mention all work (research ideas, software,
+  etc.) done by others.
+
+  The first paragraph should provide an overview of the topics being
+  covered in the report. The second paragraph should describe what you
+  learned and and how it would be meaningful to your reader, but do
+  not this in the first person.
+  
+  {\bf Write the entire abstract in the third person and in past
+    tense. It should typically be around 200-250 words.}
+\end{abstract}
+
+\keywords{Come up with your own descriptive keywords to make possible
+  for a potential reader to find your report.}
+
+\maketitle
+
+
+\section{Overview}
+\label{motivation}
+
+Use three or four paragraphs to present an overview of your project
+(in less than a page), its background, motivate your work, citing
+references here, and lay out the main goals of your project, briefly
+describing them. Be clear.
+
+Provide a roadmap for the remaining sections of the paper. For
+example, you can state something like this:
+
+This report is organized as follows. Section~\ref{related work}
+discusses work done by others in this area. Section~\ref{design}
+presents a discussion of the design, architecture, and implementation
+issues we considered, along with any special aspects of our
+project. Section~\ref{analysis} presents an analysis of the project,
+along with lessons learned.  Section~\ref{legal considerations}
+discusses the legal considerations of the issues relevant to our
+project and section~\ref{ethical considerations} discusses the ethical
+considerations of the issues relevant to our
+project. Section~\ref{conclusions} presents the current state of the
+project, possible future work, and then concludes with a few final
+remarks.
+
+{\bf Note: This specific file is a generic template with some sections
+  may not be required. If you think section titles do not fit your
+  specific needs, set up an appointment with the instructor to get
+  permission before changing them.}
+
+
+\section{Related Work}
+\label{related work}
+
+Review the related work in the literature, both research and practice,
+to place your project in perspective, and what other people have been
+doing to address this problem. Make sure your literature survey is
+fairly complete and recent, which means you should references that are
+as new as possible, i.e., some (not necessarily all) should be in the
+current or last year.
+
+You must cite your sources correctly per ACM style guidelines (and of
+course, you need to use \LaTeX and \BibTeX correctly).
+
+\section{Design and Implementation}
+\label{design}
+
+Use this section to describe the basic design, architecture, and
+implementation of your project
+
+\section{Analysis}
+\label{analysis}
+Use this section to describe the analysis of your project that you
+conducted, and whether the results are meaningful or not.
+
+Also, discuss what all you learned from the project, especially what
+mistakes to avoid in the future.
+
+\section{Legal Considerations}
+\label{legal considerations}
+
+Use this section to discuss legal issues relevant to your project,
+especially relating aspects of data that are relevant to your project.
+
+Use the textbook and your readings to guide the legal aspects of your
+discussion. Look at the laws that have been passed in recent years,
+and look at legislation that is being proposed in the space covered by
+your project.
+
+\section{Ethical Considerations}
+\label{ethical considerations}
+
+Use this section to discuss ethical issues relevant to your
+project, especially relating aspects of data that are relevant to your
+project.
+
+Use the ACM Code to guide the ethical aspects of your
+discussion~\cite{ACMCODE}.
+
+
+\section{Conclusions}
+\label{conclusions}
+
+Use this section to describe the current status of your work
+and what else needs to be done.
+
+Also, discuss what further directions your work can be taken by
+others.
+
+Finally, present some final words to place your project in
+perspective.
+
+\balance
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DELETE FROM HERE 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Tables, Figures, and Citations/References -
+  DELETE THIS SUBSECTION BEFORE ANY SUBMISSION}
+
+{\bf This unnumbered section is meant to provide you with some help in
+  dealing with figures, tables and citations, as these are sometimes
+  hard for people new to \LaTeX. Your figures, tables and citations
+  must be distributed all over your report (not here), as appropriate
+  for your report. So here is a quick guide extracted from the ACM
+  style guide.
+
+  Please delete this entire section before you submit! If
+  I see this section in your report, you will lose points!!!}
+
+Tables, figures, and citations/references in technical documents need
+to be presented correctly. In proper technical English writing (for
+reasons beyond the scope of this discussion), table captions are above
+the table and figure captions are below the figure.
+
+Figures in your report must be original, that is, created by
+the student to reflect your analysis and understanding: please do not
+screen-scrape and cut-and-paste figures from any other paper you have
+read. If you need to, just cite the figure in the original paper and
+summarize what points you want to make in this report.
+
+\begin{figure}[tb]
+\begin{center}
+\includegraphics[width=1.5in]{rit-tiger-with-text.jpg}
+\caption{The cutest tiger in the world (JPG).}
+\label{fig:SAMPLE FIGURE}
+\end{center}
+\end{figure}
+
+\begin{figure*}[tb]
+\begin{center}
+\includegraphics[width=4.5in]{rit-tiger-with-text.jpg}
+\caption{The fiercest tiger in the world (JPG).}
+\label{fig:BIG SAMPLE FIGURE}
+\end{center}
+\end{figure*}
+
+When you need to cite any original figures in your own report, they
+should be handled as demonstrated here. State that Figure~\ref{fig:SAMPLE
+  FIGURE} is a simple illustration used in the ACM Style sample
+document. Again, never refer to the figure below (or above) because
+figures may be placed by \LaTeX{} at any appropriate location that can
+change when you recompile your source $.tex$ file. Also, if you need a
+figure to be legible, you may want it to span both columns. For
+example, the same tiger can be scaled up as shown in
+Figure~\ref{fig:BIG SAMPLE FIGURE} to span both columns.
+
+\begin{table}[tb]
+\centering
+\caption{Issue Resolution}
+\label{tab:SAMPLE TABLE}
+\begin{tabular}{|l|r|l|} \hline
+Issue&Percentage&Assignment Summary\\ \hline
+Issue 1 &  5\% & Best programmers\\ \hline
+Issue 2 &  30\% &New full-time hires\\ \hline
+Issue 3 &  70\% & New co-op students on this\\ \hline
+Issue 4 &  90\% & Keep on back-burner for now\\ \hline
+\end{tabular}
+\end{table}
+
+Issues in this sample report, as shown in Table~\ref{tab:SAMPLE
+  TABLE}. Note that tables or figures are never stated as being above
+or below, as the typesetting is at liberty to place them anywhere
+meaningful
+
+Finally, citing documents needs to be done properly too. For example,
+Bowman, Debray, and Peterson~\cite{bowman:reasoning} reason about
+different naming systems. One of the common types of citations these
+days is to items only posted on the Web such as this 2014 CMU SEI
+webinar by Dormann et al.~\cite{dormann:API}.
+
+You will find the \BibTeX{} entries needed for many papers that are
+being cited at the ACM or IEEE digital libraries, or other sources on
+the web, otherwise you can write your own versions easily and add them
+to the $*.bib$ file in the folder. There are many sample bibtex
+template files that can be used to model your own references. Please
+refer to the instructor's papers for guidance.
+
+The list of all references will be generated in the standard ACM Reference
+style using \LaTeX{}/\BibTeX{} correctly. Note that you
+need to first the following sequence to get the report
+compiled correctly:
+
+\begin{enumerate}
+\item {\tt latex} {\em projreport}
+\item {\tt bibtex} {\em projreport}
+\item {\tt latex} {\em projreport}
+\item {\tt latex} {\em projreport}
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% DELETE UNTIL HERE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{projreport} 
+
+\end{document}
