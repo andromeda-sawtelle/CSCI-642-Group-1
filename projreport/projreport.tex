@@ -15,7 +15,7 @@
 \acmConference[CSCI]{}{Project Report}{2024}
 
 \begin{document}
-\title{Project Report (Rename Appropriately)}
+\title{Investigating the Security of the Smaller C Compiler}
 
 \author{Anonymous}
 \affiliation{
@@ -55,32 +55,14 @@
 \section{Overview}
 \label{motivation}
 
-Use three or four paragraphs to present an overview of your project
-(in less than a page), its background, motivate your work, citing
-references here, and lay out the main goals of your project, briefly
-describing them. Be clear.
+We are investigating how the “Smaller C” compiler addresses various security vulnerabilities common in compilers, examining the security impact of any bugs or compiler restrictions, and documenting any vulnerabilities that we find.
+	
+Since this is a compiler for C, we will be investigating how the compiler handles memory allocation and access, looking for measures put in place to safeguard against buffer overflows, invalid memory, or other potentially insecure behaviors. These issues are most dangerous when the data being accessed is on the stack, as this could allow the function return address to be overwritten, allowing malicious actors to execute arbitrary code. It will be important to investigate how, if at all, Smaller C attempts to prevent these types of attacks. David Monniaux (2) details one method for catching these attacks, in which a randomly generated “canary” value is inserted before the location that the return address is stored. This value is checked at the end of function execution. If it was changed, the return address was likely changed too, so the program stops execution to prevent any undesired behavior.
 
-Provide a roadmap for the remaining sections of the paper. For
-example, you can state something like this:
+Code Optimization in compilers can often unintentionally remove security checks or make code less secure. This can be especially true when compiling on hardware different than the intended program location. We will explore how Smaller C handles common optimization techniques, such as dead store elimination. D’Silva et al. (4) laid out how dead store elimination in GCC removed a necessary security feature from the function crypt(). We will see if Smaller C has similar erroneous optimization. Another common error with optimization is how the compiler handles undefined behavior within the C standard. There have been noted cases, by Wang et al. (3) where various security checks are removed due to it being undefined by the C standard.
 
-This report is organized as follows. Section~\ref{related work}
-discusses work done by others in this area. Section~\ref{design}
-presents a discussion of the design, architecture, and implementation
-issues we considered, along with any special aspects of our
-project. Section~\ref{analysis} presents an analysis of the project,
-along with lessons learned.  Section~\ref{legal considerations}
-discusses the legal considerations of the issues relevant to our
-project and section~\ref{ethical considerations} discusses the ethical
-considerations of the issues relevant to our
-project. Section~\ref{conclusions} presents the current state of the
-project, possible future work, and then concludes with a few final
-remarks.
 
-{\bf Note: This specific file is a generic template with some sections
-  may not be required. If you think section titles do not fit your
-  specific needs, set up an appointment with the instructor to get
-  permission before changing them.}
-
+Smaller C has some unique limitations that may, if improperly implemented, lead to security vulnerabilities. First, there is no stack overflow check, and extremely few compile-time checks. This might cause a program to be able to be frozen by putting it into an infinite loop. Secondly, large integers constant are ambiguously assigned to types of different sizes unless they are explicitly marked. This could cause different amounts of space to be allocated, which could cause issues in extreme cases.
 
 \section{Related Work}
 \label{related work}
