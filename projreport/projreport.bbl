@@ -1,0 +1,100 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{5}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[{Association for Computing Machinery}(2018)]%
+        {ACMCODE}
+\bibfield{author}{\bibinfo{person}{{Association for Computing Machinery}}.}
+  \bibinfo{year}{2018}\natexlab{}.
+\newblock \bibinfo{title}{{ACM Code of Ethics and Professional Conduct}}.
+\newblock \bibinfo{howpublished}{ACM, New York}.
+\newblock
+\newblock
+\shownote{\url{https://www.acm.org/code-of-ethics}}.
+
+
+\bibitem[CWE(2023)]%
+        {CWE:2023}
+\bibfield{author}{\bibinfo{person}{CWE}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock
+\newblock
+\urldef\tempurl%
+\url{https://cwe.mitre.org/top25/archive/2023/2023_top25_list.html}
+\showURL{%
+\tempurl}
+
+
+\bibitem[D'Silva et~al\mbox{.}(2015)]%
+        {DSilva:Correctness}
+\bibfield{author}{\bibinfo{person}{Vijay D'Silva}, \bibinfo{person}{Mathias
+  Payer}, {and} \bibinfo{person}{Dawn Song}.} \bibinfo{year}{2015}\natexlab{}.
+\newblock \showarticletitle{The Correctness-Security Gap in Compiler
+  Optimization}. In \bibinfo{booktitle}{\emph{2015 IEEE Security and Privacy
+  Workshops}}. IEEE, \bibinfo{publisher}{IEEE}, \bibinfo{address}{New York,
+  NY}, \bibinfo{pages}{73--87}.
+\newblock
+
+
+\bibitem[Monniaux(2024)]%
+        {Monniaux:Memory}
+\bibfield{author}{\bibinfo{person}{David Monniaux}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Memory Simulations, Security and Optimization in a
+  Verified Compiler}. In \bibinfo{booktitle}{\emph{Proceedings of the 13th ACM
+  SIGPLAN International Conference on Certified Programs and Proofs}}.
+  Association for Computing Machinery, \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{London, UK},
+  \bibinfo{pages}{103–117}.
+\newblock
+
+
+\bibitem[Wang et~al\mbox{.}(2013)]%
+        {Wang:Optimization}
+\bibfield{author}{\bibinfo{person}{Xi Wang}, \bibinfo{person}{Nickolai
+  Zeldovich}, \bibinfo{person}{M.~Frans Kaashoek}, {and}
+  \bibinfo{person}{Armando Solar-Lezama}.} \bibinfo{year}{2013}\natexlab{}.
+\newblock \showarticletitle{Towards optimization-safe systems: analyzing the
+  impact of undefined behavior}. In \bibinfo{booktitle}{\emph{Proceedings of
+  the Twenty-Fourth ACM Symposium on Operating Systems Principles}}.
+  Association for Computing Machinery, \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{New York, NY},
+  \bibinfo{pages}{260–275}.
+\newblock
+
+
+\end{thebibliography}
