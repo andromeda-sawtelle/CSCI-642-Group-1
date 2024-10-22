@@ -5,3 +5,12 @@ projreport/projreport.synctex.gz
 
 .DS_STORE
 */.DS_STORE
+*.json
+*.sqlite
+*.vsidx
+*.db
+*.ipch
+*.bin
+smallerc/.vs/smallerc/v17/.wsuo
+projreport/projreport.pdf
+projreport/projreport.pdf
