@@ -67,6 +67,63 @@ series = {ASPLOS 2023}
 	MONTH = "May", 
 	YEAR = {2015}	}
 
+	@inproceedings{Chen:HeMate,
+author = {Chen, Yu-Chang and Li, Shih-Wei},
+title = {HeMate: Enhancing Heap Security through Isolating Primitive Types with Arm Memory Tagging Extension},
+year = {2024},
+isbn = {9798400717185},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3664476.3664492},
+doi = {10.1145/3664476.3664492},
+abstract = {Memory safety vulnerabilities are a significant challenge for programming languages like C and C++. Among these vulnerabilities, heap-based issues have become more prevalent in recent years. Exploiting these vulnerabilities allows adversaries to execute arbitrary memory reads, writes, and even code execution. The Memory Tagging Extension (MTE), introduced in the Arm v8.5-A processor architecture, is an example of such a security feature. MTE has been utilized in modern software to implement probabilistic protection for heap-based memory safety vulnerabilities, including use-after-free and heap-based buffer overflow. However, the existing MTE-based approaches offer probabilistic protection and are vulnerable to brute-force attacks. Moreover, these approaches offer inter-object isolation but are vulnerable to intra-object overflow. Further, adversaries leverage memory confusion to manipulate or leak pointers, leading to arbitrary memory read/write and code execution. In response to the limitation and security, this work introduces a novel usage of MTE, called HeMate, to isolate memory storing different primitive types of data on the heap to enhance memory safety. This approach provides a non-probabilistic constraint on vulnerability exploitation against memory objects with different primitive data types, such as intra-object overflow and use-after-free. We have implemented a HeMate prototype compiler for C programs based on the LLVM framework. Our approach effectively leverages MTE to protect against memory safety vulnerabilities while preserving the functionality of commonly used Linux applications.},
+booktitle = {Proceedings of the 19th International Conference on Availability, Reliability and Security},
+articleno = {30},
+numpages = {11},
+keywords = {Arm MTE, Software Security},
+location = {Vienna, Austria},
+series = {ARES '24}
+}
+
+@inproceedings{Dang:ShadowCanaries,
+author = {Dang, Thurston H.Y. and Maniatis, Petros and Wagner, David},
+title = {The Performance Cost of Shadow Stacks and Stack Canaries},
+year = {2015},
+isbn = {9781450332453},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/2714576.2714635},
+doi = {10.1145/2714576.2714635},
+abstract = {Control flow defenses against ROP either use strict, expensive, but strong protection against redirected RET instructions with shadow stacks, or much faster but weaker protections without. In this work we study the inherent overheads of shadow stack schemes. We find that the overhead is roughly 10\% for a traditional shadow stack. We then design a new scheme, the parallel shadow stack, and show that its performance cost is significantly less: 3.5\%. Our measurements suggest it will not be easy to improve performance on current x86 processors further, due to inherent costs associated with RET and memory load/store instructions. We conclude with a discussion of the design decisions in our shadow stack instrumentation, and possible lighter-weight alternatives.},
+booktitle = {Proceedings of the 10th ACM Symposium on Information, Computer and Communications Security},
+pages = {555–566},
+numpages = {12},
+keywords = {stack cookie, stack canary, shadow stack},
+location = {Singapore, Republic of Singapore},
+series = {ASIA CCS '15}
+}
+
+@online{AddressSanitizeWiki,
+  author = {Alexander Potapenko, Mitch Phillips},
+  title = {AddressSanitizerAlgorithm},
+  year = 2017,
+  url = {http://web.archive.org/web/20080207010024/http://www.808multimedia.com/winnt/kernel.htm},
+  urldate = {2017-10-03}
+}
+
+@inproceedings {Serebryany:AddressSanitize,
+author = {Konstantin Serebryany and Derek Bruening and Alexander Potapenko and Dmitriy Vyukov},
+title = {{AddressSanitizer}: A Fast Address Sanity Checker},
+booktitle = {2012 USENIX Annual Technical Conference (USENIX ATC 12)},
+year = {2012},
+isbn = {978-931971-93-5},
+address = {Boston, MA},
+pages = {309--318},
+url = {https://www.usenix.org/conference/atc12/technical-sessions/presentation/serebryany},
+publisher = {USENIX Association},
+month = jun
+}
+
 @misc{CWE:2023, url={https://cwe.mitre.org/top25/archive/2023/2023_top25_list.html},
 	author={CWE}, journal={CWE}, publisher={Department of Homeland Security}, year={2023}} 
 
