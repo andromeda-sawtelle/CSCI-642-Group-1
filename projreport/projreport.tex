@@ -14,6 +14,8 @@
 \pagestyle{plain}
 \acmConference[CSCI]{}{Project Report}{2024}
 
+\newcommand{\code}[1]{\texttt{#1}}
+
 \begin{document}
 \title{Investigating the Security of the Smaller C Compiler}
 
@@ -23,27 +25,11 @@
 }
 
 \begin{abstract}
-  The abstract is a fancy way to saying {\bf Summary.} It should
-  preferably be two paragraphs that summarize your report. Abstracts
-  are read independently from the rest of the report so you must not
-  cite your report or any other papers. Study other abstracts in the
-  papers you have been reading to understand what an abstract should
-  mean, although many are poorly written.
 
-  The abstract is not an introduction or overview of your report! It is
-  a summary of your report, which should include the background,
-  context, content, and contributions/results of your report. Make
-  sure you only take credit for what you did (which is the comparison
-  and your learning) and mention all work (research ideas, software,
-  etc.) done by others.
-
-  The first paragraph should provide an overview of the topics being
-  covered in the report. The second paragraph should describe what you
-  learned and and how it would be meaningful to your reader, but do
-  not this in the first person.
+Programs written in C and C++ can be vulnerable to a wide range of memory safety issues. From out-of-bounds reads and writes to use after free errors, developers have to be careful to ensure that they release code without critical security flaws. Some of the most common vulnerabilities include out-of-bounds (OOB) read and writes, use after free (UAF), and improper use of shared resources. Often, compilers have tools built in that help developers catch these memory safety violations. While it is not possible to catch or prevent all memory safety vulnerabilities in a compiler, especially in languages where there is unsafe behavior explicitly allowed by the standard like C, there are many approaches that can be applied to increase memory safety.
   
-  {\bf Write the entire abstract in the third person and in past
-    tense. It should typically be around 200-250 words.}
+This paper investigates a few methods to catch memory safety violations to see if they could be applied to a single-pass C compiler called “Smaller C”. This includes a basic Canary implementation to prevent stack-smashing attacks and an implementation of poisoning memory addresses to catch UAF errors. Along with this, the research covers built-in address sanitation and investigation into compile-time checks for potential race conditions, which are effective, but potentially cumbersome– and by extension difficult to implement in the “Smaller C” compiler with traditional methods. The investigation into security methods that can be used in a variety of compilers also sheds light on what is viable for lighter systems, and what techniques can avoid losing out on hard-earned performance optimizations.
+
 \end{abstract}
 
 \keywords{Come up with your own descriptive keywords to make possible
@@ -55,42 +41,42 @@
 \section{Overview}
 \label{motivation}
 
-We are investigating how the “Smaller C” compiler addresses various security vulnerabilities common in compilers, examining the security impact of any bugs or compiler restrictions, and documenting any vulnerabilities that we find.
+Memory safety vulnerabilities are a constant security threat to programs written in C and C++. As recently as this year, major consumer software companies still uncover security vulnerabilities that cause privacy concerns for users. Large tech companies such as Apple, Google, and Microsoft still regularly find seemingly basic vulnerabilities regarding incorrect memory usage.
 
-Some compilers are able to catch and address many of the most common software vulnerabilities described in the Common Weakness Enumeration.\cite{CWE:2023} Of these vulnerabilities, only a few can theoretically be caught by compilers.
+The Common Weakness Enumeration \cite{CWE:2023} describes many of the most common memory safety issues. Of these vulnerabilities, only a few can theoretically be caught by compilers.
 
-The first of these bugs is Out-of-bounds read and writes, which occur when memory outside of an allocated space is accessed in the program. This can lead to undefined behavior, and can be exploited by malicious actors to change program functionality. Ideally, static out-of-bounds reference should be caught by the compiler and flagged as an error, but dynamic accesses can still pass through.
+The first of these bugs is out-of-bounds (OOB) read and writes, which occur when memory outside of an allocated space is accessed in the program. This can lead to undefined behavior, and can be exploited by malicious actors to change program functionality. Ideally, static out-of-bounds references should be caught by the compiler and flagged as an error, but dynamic accesses can still pass through. Some compilers implement a memory tagging procedure to detect OOB errors at runtime \cite{HeMate}. In this procedure, memory blocks are locked with a tag that is stored in the end bits of a pointer. When a memory access is made, the tag in the pointer is checked against the lock on the memory block. If they do not match, that means that the pointer being used is meant to access a different data block, and is trying to access data that it should not be able to access. In this scenario, program execution is terminated to prevent any security breaches. 
 
-A second issue is use after free (UAF), in which memory that was allocated for use is freed, then accessed later. Again, this can be used to cause unintended behavior if exploited. In sequential programs, it should be possible to prevent this, but it would also be ideal to ensure that memory is freed in the same scope it is declared, and only after it has finished being used. Most C compilers do not address this, but using an address sanitation procedure to detect memory errors in implementation can reduce this vulnerability. Another possible vulnerability is null-pointer dereferencing. Null-pointer dereferencing refers to attempting to read memory from a null-pointer, which could be a pointer that has not yet been assigned, or a pointer that was freed and reset. Checks like those described above could help with this, but these tasks will likely be harder, due to the single-pass nature of Smaller C. 
+Memory tagging procedures generally impose a large overhead and can be difficult to implement, so many compilers focus on preventing OOB errors where they are most important: on the stack. Overwriting data on the stack can allow the function return address to be overwritten, allowing malicious actors to execute arbitrary code by inserting a faulty address. David Monniaux details one method for catching these attacks, in which a randomly generated “canary” value is inserted before the location that the return address is stored~\cite{Monniaux:Memory}. This value is checked at the end of function execution, before a value is returned. If the value was changed, then much like a canary in a coal mine, it signifies that something has gone wrong. In this case, it means that the return address was likely changed too, so the program stops execution to prevent any undesired behavior.
 
-A particularly difficult to diagnose vulnerability that could be addressed is the use of shared resources with improper synchronization. This refers to accessing any shared data or resource in a multi-threaded system in a way that either interferes with other programs trying to use the same resource, or prevents other programs from being able to access that resource. If a resource is declared as “critical,” which means that it should not be accessed by multiple sources during an operation, it should always be surrounded by a semaphore, lock, or other equivalent security measure that ensures exclusive access to it. A compiler could check for the entering and exiting of critical sections when accessing critical resources, so we will see if Smaller C implements any such behavior. 
+A second issue is use after free (UAF), in which memory that was allocated for use is freed, then accessed later. This can be used to cause undefined behavior when exploited. In sequential programs, it should be possible to prevent this, but it would also be ideal to ensure that memory is freed in the same scope it is declared, and only after it has finished being used. Most C compilers do not address this, but using an address sanitation procedure to detect memory errors in implementation can reduce this vulnerability. (CITE?) Another possible vulnerability is null-pointer dereferencing. Null-pointer dereferencing refers to attempting to read memory from a null-pointer, which could be a pointer that has not yet been assigned, or a pointer that was freed and reset. Checks like those described above could help with this, but these tasks will likely be harder due to the single-pass nature of Smaller C. Since there is only a single pass through each compilation unit, and no intermediate steps or representation, there are potential security flaws caused by one portion of a non-externalized unit that has emergent insecure behavior due to another subsequent portion. This means that the source code may need to be reviewed semantically for behaviors normally caught through the use of comparative or sequential compilation.
 
-A vulnerability that C compilers often have is one where stack data can be overwritten by invalid memory accesses, overflows, or other common code vulnerabilities. In the worst case, overwriting data on the stack can allow the function return address to be overwritten, allowing malicious actors to execute arbitrary code by inserting a faulty address. It will be important to investigate how Smaller C attempts to prevent these types of attacks. David Monniaux details one method for catching these attacks, in which a randomly generated “canary” value is inserted before the location that the return address is stored.~\cite{Monniaux:Memory} This value is checked at the end of function execution. If it was changed, then much like a canary in a coal mine, it signifies that something has gone wrong. In this case, it means that the return address was likely changed too, so the program stops execution to prevent any undesired behavior. This method may not even be possible in a single-pass compiler, so some other work-around may be necessary.
+A particularly difficult to diagnose vulnerability that could be addressed is the use of shared resources with improper synchronization. This refers to accessing any shared data or resource in a multi-threaded system in a way that either interferes with other programs trying to use the same resource, or prevents other programs from being able to access that resource. If a resource is declared as “critical,” which means that it should not be accessed by multiple sources during an operation, it should always be surrounded by a semaphore, lock, or other equivalent security measure that ensures exclusive access to it. A compiler could check for unexpected behavior when entering and exiting of critical sections of code~\cite{Li:Finding}, so we will see if Smaller C implements any such behavior.
 
-Code Optimization in compilers can often unintentionally remove security checks or make code less secure. This can be especially true when compiling on hardware different than the intended program location. We will explore how Smaller C handles common optimization techniques, such as dead store elimination. D’Silva et al. laid out how dead store elimination in GCC removed a necessary security feature from the function crypt().~\cite{DSilva:Correctness} We will see if Smaller C has similar erroneous optimization. Another common error with optimization is how the compiler handles undefined behavior within the C standard. There have been noted cases, by Wang et al. where various security checks are removed due to it being undefined by the C standard.~\cite{Wang:Optimization}
+Smaller C has some unique limitations that may, if improperly implemented, lead to security vulnerabilities. First, there is no stack overflow check, and very few compile-time checks compared to most multi-pass compilers. This might cause a program to be able to be frozen by putting it into an infinite loop. Secondly, large integer constants are ambiguously assigned to types of different sizes unless they are explicitly marked. This can cause different amounts of space to be allocated, which can cause issues in extreme cases.
 
-Smaller C has some unique limitations that may, if improperly implemented, lead to security vulnerabilities. First, there is no stack overflow check, and very few compile-time checks compared to most multi-pass compilers. This might cause a program to be able to be frozen by putting it into an infinite loop. Secondly, large integers constant are ambiguously assigned to types of different sizes unless they are explicitly marked. This can cause different amounts of space to be allocated, which can cause issues in extreme cases.
-
-Over the course of this project, we intend to document how Smaller C addresses these vulnerabilities, and provide solutions or improvements. It may not be possible to prevent these issues, but it should be possible to add safety features to catch these issues most of the time.
+This paper documents security issues present in smaller C and puts forward a number of improvements that will reduce the vulnerabilities present in code compiled with Smaller C.
 
 \section{Related Work}
-\label{related work}
 
-Review the related work in the literature, both research and practice,
-to place your project in perspective, and what other people have been
-doing to address this problem. Make sure your literature survey is
-fairly complete and recent, which means you should references that are
-as new as possible, i.e., some (not necessarily all) should be in the
-current or last year.
+\subsection{Smaller C function}
+It is important to understand the steps taken by Smaller C to compile code. Before any compilation happens, there is typically a preprocessing step. In GCC, the preprocessor performs a few simple tasks, such as breaking the program into lines, removing comments, and merging continued lines~\cite{GCC}. Ultimately, this step tends to not have much impact on the finished code, as long as it functions properly. The code for Smaller C’s preprocessor was not included in the GitHub, only the executable files. 
+In the compilation step, a traditional compiler might begin by using a lexical analyzer to divide the characters in the program into tokens, which are distinct symbols with meaning in the program. This includes math symbols, semicolons, file names, and all other atomic elements of code. From there, this stream of tokens would be syntactically analyzed, verifying that the tokens appear in a valid order. Then, the function of the tokens would be determined using a semantic analyzer, and an intermediary code file would be generated. This intermediary code is more suited to optimization and modification. The optimization step involves reordering code blocks and adjusting code so that it runs faster. Finally, machine code is generated. Most compilers perform each step in sequence, not moving onto the next until the previous has been completed. In contrast, Smaller C parses each token, verifies it as being properly syntactically ordered and adds it to a block of symbols. 
+As soon as a block of code can be understood, it is immediately converted into machine code. This means that any improvements made to Smaller C cannot come from code analysis, since there is no period of time in which more than a single line of code is analyzed. As such, improvements to Smaller C have to be made primarily in the code generation step, padding unsafe actions written in C into memory safe interactions in machine code. 
 
-You must cite your sources correctly per ACM style guidelines (and of
-course, you need to use \LaTeX and \BibTeX correctly).
+\subsection{Code Optimization}
+Code Optimization in compilers often unintentionally removes security checks and makes code less secure than the unoptimized variant. This can be especially true when compiling on hardware different than the intended program location. We will explore how Smaller C handles common optimization techniques, such as dead store elimination. D’Silva et al. laid out how dead store elimination in GCC removed a necessary security feature from the function crypt()~\cite{DSilva:Correctness}. Another common error with optimization is how the compiler handles undefined behavior within the C standard. There have been noted cases, by Wang et al. where various security checks are removed due to it being undefined by the C standard~\cite{Wang:Optimization}. After looking into the codebase of Smaller C, no evidence of code optimization was found, although it seems as though an intermediary called RetroBSD may reorder some instructions. Assembly code is generated based on the C program input, with very little in the way of modifications that could create a security threat.
+
+\subsection{Related Memory Security Improvements}
+This subsection discusses several memory safety improvements that have been introduced in other compilers that likely will not work in Smaller C.
+Memory tagging, like described above, is a process in which sections of memory are locked so that they can only be accessed by certain pointers. Chen et al. describes an implementation that works to secure memory on the heap~\cite{HeMate}. 
+During compilation, the author's tool, HeMate, finds the type, base address, and size, and uses it to generate tags for each allocated block of memory. HeMate then stores the tags in the ending bits of pointers such that they contain type information, as well as a randomly generated unique tag. This requires every memory allocation to have a concrete type at compile time, which, despite being a standard style for C, is not assured by the Smaller C compiler. This requirement makes storing types in memory tags all but impossible in Smaller C. Unfortunately, memory tagging in general does not seem to be possible either. While it would be relatively easy to add a lock to a block of memory with a simple modification to code generation, editing the pointers to include a tag would require a significant refactoring of smaller C. Since it is a single pass system as well, it would also be extremely difficult to ensure that pointers to the same location in memory have the same tag, as is typical in memory tagging procedures. Memory tagging does not seem to be feasible in Smaller C. 
+
 
 \section{Design and Implementation}
 \label{design}
 
-Use this section to describe the basic design, architecture, and
-implementation of your project
+The first fix proposed for the Smaller C compiler is to add Canaries to protect against Stack Smashing. Currently, Smaller C has no such protections, and allows a sample program \ref{FIG OF SAMPLE CODE} to compile and run in such a manner that it corrupts the stack during execution. To prevent this, the code generation section of Smaller C can be modified to include a canary check. In the GenFxnProlog function, which sets up the stack frame for a function, assembly instructions could be written to add a canary to the end of the stack frame. In the function GenFxnEpilog, which handles the ending of function execution, assembly instructions could be added into the code to check that canary. If the value differs, a branch error is thrown and the program stops execution. A difficulty with this approach is considering where to store the canary outside of the stack frame, so that it can be checked. Originally, a sensible approach seemed to be storing it inside the stack frame of the previous function, but this would not prevent stack smashing attacks. To check this canary, we would have to return to the previous stack frame, which is impossible if the return address was overwritten in a stack smashing attack. Another idea is to store this value in a register, but Smaller C has no spare registers that are guaranteed to be unmodified by function execution, so this cannot be done. Likewise, approaches that use a 
 
 \section{Analysis}
 \label{analysis}
