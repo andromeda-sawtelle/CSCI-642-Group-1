@@ -14,3 +14,7 @@ projreport/projreport.synctex.gz
 smallerc/.vs/smallerc/v17/.wsuo
 projreport/projreport.pdf
 projreport/projreport.pdf
+.idea
+*/projreport.dvi
+*/projreport.xcp
+*/texput.log
