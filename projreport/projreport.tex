@@ -7,6 +7,7 @@
 \usepackage{balance}
 \usepackage{color}
 \usepackage{enumerate}
+\usepackage{listings}
 \settopmatter{printacmref=false}
 
 \setcopyright{none}
@@ -15,6 +16,23 @@
 \acmConference[CSCI]{}{Project Report}{2024}
 
 \newcommand{\code}[1]{\texttt{#1}}
+
+\lstset{
+  language=C,
+  numbers=left,
+  stepnumber=1,        
+  numbersep=5pt,
+%  backgroundcolor=\color{white},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  basicstyle=\small,
+  tabsize=2,
+  captionpos=b,
+  breaklines=true,
+  breakatwhitespace=true,
+  title=\lstname,
+}
 
 \begin{document}
 \title{Investigating the Security of the Smaller C Compiler}
@@ -50,6 +68,8 @@ Memory tagging procedures generally impose a large overhead and can be difficult
 
 A second issue is use after free (UAF), in which memory that was allocated for use is freed, then accessed later. This can be used to cause undefined behavior when exploited. In sequential programs, it should be possible to prevent this, but it would also be ideal to ensure that memory is freed in the same scope it is declared, and only after it has finished being used. Most C compilers do not address this, but using an address sanitation procedure to detect memory errors in implementation can reduce this vulnerability~\cite{Serebryany:AddressSanitize}. Another possible vulnerability is null-pointer dereferencing. Null-pointer dereferencing refers to attempting to read memory from a null-pointer, which could be a pointer that has not yet been assigned, or a pointer that was freed and reset. Checks like those described above could help with this, but these tasks will likely be harder due to the single-pass nature of Smaller C. Since there is only a single pass through each compilation unit, and no intermediate steps or representation, there are potential security flaws caused by one portion of a non-externalized unit that has emergent insecure behavior due to another subsequent portion. This means that the source code may need to be reviewed semantically for behaviors normally caught through the use of comparative or sequential compilation.
 
+\lstinputlisting{useafterfree.c}
+
 A particularly difficult to diagnose vulnerability that could be addressed is the use of shared resources with improper synchronization. This refers to accessing any shared data or resource in a multi-threaded system in a way that either interferes with other programs trying to use the same resource, or prevents other programs from being able to access that resource. If a resource is declared as “critical,” which means that it should not be accessed by multiple sources during an operation, it should always be surrounded by a semaphore, lock, or other equivalent security measure that ensures exclusive access to it. A compiler could check for unexpected behavior when entering and exiting of critical sections of code~\cite{Li:Finding}, so we will see if Smaller C implements any such behavior.
 
 Smaller C has some unique limitations that may, if improperly implemented, lead to security vulnerabilities. First, there is no stack overflow check, and very few compile-time checks compared to most multi-pass compilers. This might cause a program to be able to be frozen by putting it into an infinite loop. Secondly, large integer constants are ambiguously assigned to types of different sizes unless they are explicitly marked. This can cause different amounts of space to be allocated, which can cause issues in extreme cases.
@@ -83,15 +103,14 @@ During compilation, the author's tool, HeMate, finds the type, base address, and
 
 The first fix proposed for the Smaller C compiler is to add Canaries to protect against Stack Smashing. Currently, Smaller C has no such protections, and allows a sample program\ref{fig:Stack} to compile and run in such a manner that it corrupts the stack during execution. To prevent this, the code generation section of Smaller C can be modified to include a canary check. In the \code{GenFxnProlog} function, which sets up the stack frame for a function, assembly instructions could be written to add a canary to the end of the stack frame. In the function \code{GenFxnEpilog}, which handles the ending of function execution, assembly instructions could be added into the code to check that canary. If the value differs, a branch error is thrown and the program stops execution. A difficulty with this approach is considering where to store the canary outside of the stack frame, so that it can be checked. Originally, a sensible approach seemed to be storing it inside the stack frame of the previous function, but this would not prevent stack smashing attacks. To check this canary, we would have to return to the previous stack frame, which is impossible if the return address was overwritten in a stack smashing attack. Another idea is to store this value in a register, but Smaller C has no spare registers that are guaranteed to be unmodified by function execution, so this cannot be done. Another approach is needed to implement canaries in Smaller C.
 
+\lstinputlisting{genfxnepilog.c}
+
 The next fix proposed for the Smaller C compiler is adding memory address sanitization. This is a method of checking code on compile time for errors like buffer overflow and UAF. This is generally done by adding marks to memory addresses. These are either adding 32 byte aligned poisoned “redzones” before and after contiguous areas of memory, and poison tags when a memory address has been freed~\cite{AddressSanitizeWiki}. The redzone allows checks to be made if any access to memory is in one of these zones, and an error can be thrown and the compiler stopped. The poison tags for freeing equate to an if statement before any dereference of memory to check if that address has been poisoned. Both of these implementations heavily make use of the ShadowStack~\cite{Serebryany:AddressSanitize}.
 
 To implement these poison checks for Smaller C there need to be changes made to the \code{ParseDecl} and \code{derefAnyPtr} functions, as well as creating a list of poisoned memory addresses. After line 8368, where a function name is caught, there can be a check to see if it is freed, and add the memory address in its parameters to the list of poisoned memory locations. A check can also be made in the \code{derefAnyPtr} function to see if the given memory address is poisoned, and error out appropriately.
 
-\begin{figure}
-\includegraphics[width=3in]{StackSmashing.png}
-\caption{A sample program demonstrating a stack smashing exploit.}
-\label{fig:Stack}
-\end{figure}
+\lstinputlisting{asanpoison.c}
+%\caption{An excerpt from our address sanitation poisoning routine.
 
 \section{Analysis}
 \label{analysis}

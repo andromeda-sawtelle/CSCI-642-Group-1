@@ -1,56 +1,73 @@
-This is BibTeX, Version 0.99d
+This is BibTeX, Version 0.99d (TeX Live 2024)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: projreport.aux
-Reallocating 'name_of_file' (item size: 1) to 21 items.
 The style file: ACM-Reference-Format.bst
-Reallocating 'name_of_file' (item size: 1) to 11 items.
-Reallocating 'singl_function' (item size: 4) to 100 items.
-Reallocating 'singl_function' (item size: 4) to 100 items.
-Reallocating 'wiz_functions' (item size: 4) to 6000 items.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Database file #1: projreport.bib
-Reallocating 'singl_function' (item size: 4) to 100 items.
-Reallocating 'glb_str_end' (item size: 4) to 20 items.
-Reallocating 'glb_str_ptr' (item size: 4) to 20 items.
-Reallocating 'global_strs' (item size: 1) to 4000000 items.
-Reallocating 'singl_function' (item size: 4) to 100 items.
-You've used 5 entries,
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Warning--no key, author in AppleSecurity
+Warning--no author, editor, organization, or key in AppleSecurity
+Warning--to sort, need author or key in AppleSecurity
+Warning--no key, author in GCC
+Warning--no author, editor, organization, or key in GCC
+Warning--to sort, need author or key in GCC
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=200001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Warning--no key, author in AppleSecurity
+Warning--no key, author in AppleSecurity
+Warning--no key, author in GCC
+Warning--no key, author in GCC
+Reallocated singl_function (elt_size=4) to 100 items from 50.
+Warning--no key, author in GCC
+Warning--empty organization in GCC
+Warning--empty year in GCC
+Warning--empty organization in GCC
+Warning--no key, author in AppleSecurity
+Warning--empty organization in AppleSecurity
+Warning--empty organization in AppleSecurity
+Warning--empty organization in AddressSanitizeWiki
+You've used 11 entries,
             5981 wiz_defined-function locations,
-            1510 strings with 18887 characters,
-and the built_in function-call counts, 5125 in all, are:
-= -- 551
-> -- 121
+            1560 strings with 20326 characters,
+and the built_in function-call counts, 10753 in all, are:
+= -- 1150
+> -- 239
 < -- 0
-+ -- 37
-- -- 42
-* -- 295
-:= -- 485
-add.period$ -- 25
-call.type$ -- 5
-change.case$ -- 30
-chr.to.int$ -- 5
-cite$ -- 5
-duplicate$ -- 526
-empty$ -- 352
-format.name$ -- 50
-if$ -- 1205
++ -- 78
+- -- 89
+* -- 687
+:= -- 970
+add.period$ -- 50
+call.type$ -- 11
+change.case$ -- 63
+chr.to.int$ -- 11
+cite$ -- 37
+duplicate$ -- 1104
+empty$ -- 755
+format.name$ -- 109
+if$ -- 2524
 int.to.chr$ -- 2
 int.to.str$ -- 1
-missing$ -- 15
-newline$ -- 82
-num.names$ -- 35
-pop$ -- 202
+missing$ -- 29
+newline$ -- 149
+num.names$ -- 63
+pop$ -- 450
 preamble$ -- 1
-purify$ -- 70
+purify$ -- 146
 quote$ -- 0
-skip$ -- 228
+skip$ -- 461
 stack$ -- 0
-substring$ -- 360
-swap$ -- 71
+substring$ -- 754
+swap$ -- 136
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 150
-warning$ -- 0
-while$ -- 31
+type$ -- 330
+warning$ -- 18
+while$ -- 59
 width$ -- 0
-write$ -- 143
+write$ -- 277
+(There were 18 warnings)

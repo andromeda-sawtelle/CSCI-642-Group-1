@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{5}
+\begin{thebibliography}{11}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -37,6 +37,41 @@
 \providecommand\natexlab[1]{#1}
 \providecommand\showeprint[2][]{arXiv:#2}
 
+\bibitem[GCC({[n.\,d.]})]%
+        {GCC}
+ \bibinfo{year}{[n.\,d.]}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{GNU Manual: CPP}}.
+\newblock
+\urldef\tempurl%
+\url{https://gcc.gnu.org/onlinedocs/cpp/}
+\showURL{%
+\tempurl}
+
+
+\bibitem[App(2024)]%
+        {AppleSecurity}
+ \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{About the security content of iOS 18 and
+  iPadOS 18}}.
+\newblock
+\urldef\tempurl%
+\url{https://support.apple.com/en-us/121250}
+\showURL{%
+\tempurl}
+
+
+\bibitem[Alexander~Potapenko(2017)]%
+        {AddressSanitizeWiki}
+\bibfield{author}{\bibinfo{person}{Mitch~Phillips Alexander~Potapenko}.}
+  \bibinfo{year}{2017}\natexlab{}.
+\newblock \bibinfo{booktitle}{\emph{AddressSanitizerAlgorithm}}.
+\newblock
+\urldef\tempurl%
+\url{https://github.com/google/sanitizers/wiki/AddressSanitizerAlgorithm}
+\showURL{%
+\tempurl}
+
+
 \bibitem[{Association for Computing Machinery}(2018)]%
         {ACMCODE}
 \bibfield{author}{\bibinfo{person}{{Association for Computing Machinery}}.}
@@ -46,6 +81,24 @@
 \newblock
 \newblock
 \shownote{\url{https://www.acm.org/code-of-ethics}}.
+
+
+\bibitem[Chen and Li(2024)]%
+        {Chen:HeMate}
+\bibfield{author}{\bibinfo{person}{Yu-Chang Chen} {and}
+  \bibinfo{person}{Shih-Wei Li}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{HeMate: Enhancing Heap Security through Isolating
+  Primitive Types with Arm Memory Tagging Extension}. In
+  \bibinfo{booktitle}{\emph{Proceedings of the 19th International Conference on
+  Availability, Reliability and Security}} (Vienna, Austria)
+  \emph{(\bibinfo{series}{ARES '24})}. \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{New York, NY, USA}, Article
+  \bibinfo{articleno}{30}, \bibinfo{numpages}{11}~pages.
+\newblock
+\showISBNx{9798400717185}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/3664476.3664492}
+\showDOI{\tempurl}
 
 
 \bibitem[CWE(2023)]%
@@ -70,6 +123,24 @@
 \newblock
 
 
+\bibitem[Li and Su(2023)]%
+        {Li:Finding}
+\bibfield{author}{\bibinfo{person}{Shaohua Li} {and} \bibinfo{person}{Zhendong
+  Su}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Finding Unstable Code via Compiler-Driven
+  Differential Testing}. In \bibinfo{booktitle}{\emph{Proceedings of the 28th
+  ACM International Conference on Architectural Support for Programming
+  Languages and Operating Systems, Volume 3}} (Vancouver, BC, Canada)
+  \emph{(\bibinfo{series}{ASPLOS 2023})}. \bibinfo{publisher}{Association for
+  Computing Machinery}, \bibinfo{address}{New York, NY, USA},
+  \bibinfo{pages}{238–251}.
+\newblock
+\showISBNx{9781450399180}
+\urldef\tempurl%
+\url{https://doi.org/10.1145/3582016.3582053}
+\showDOI{\tempurl}
+
+
 \bibitem[Monniaux(2024)]%
         {Monniaux:Memory}
 \bibfield{author}{\bibinfo{person}{David Monniaux}.}
@@ -81,6 +152,23 @@
   Computing Machinery}, \bibinfo{address}{London, UK},
   \bibinfo{pages}{103–117}.
 \newblock
+
+
+\bibitem[Serebryany et~al\mbox{.}(2012)]%
+        {Serebryany:AddressSanitize}
+\bibfield{author}{\bibinfo{person}{Konstantin Serebryany},
+  \bibinfo{person}{Derek Bruening}, \bibinfo{person}{Alexander Potapenko},
+  {and} \bibinfo{person}{Dmitriy Vyukov}.} \bibinfo{year}{2012}\natexlab{}.
+\newblock \showarticletitle{{AddressSanitizer}: A Fast Address Sanity Checker}.
+  In \bibinfo{booktitle}{\emph{2012 USENIX Annual Technical Conference (USENIX
+  ATC 12)}}. \bibinfo{publisher}{USENIX Association}, \bibinfo{address}{Boston,
+  MA}, \bibinfo{pages}{309--318}.
+\newblock
+\showISBNx{978-931971-93-5}
+\urldef\tempurl%
+\url{https://www.usenix.org/conference/atc12/technical-sessions/presentation/serebryany}
+\showURL{%
+\tempurl}
 
 
 \bibitem[Wang et~al\mbox{.}(2013)]%
