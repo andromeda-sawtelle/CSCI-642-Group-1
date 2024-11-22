@@ -56,7 +56,9 @@ int bufferOverrun(int count, int overrun)
     printIntegers(someInts, count + overrun);
 }
 
-int improperSynchronization() {
+int improperSynchronization() 
+{
+    // TODO:
 
 }
 
