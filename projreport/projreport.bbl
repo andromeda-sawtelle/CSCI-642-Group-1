@@ -2,7 +2,7 @@
 %%% Do NOT edit. File created by BibTeX with style
 %%% ACM-Reference-Format-Journals [18-Jan-2012].
 
-\begin{thebibliography}{11}
+\begin{thebibliography}{16}
 
 %%% ====================================================================
 %%% NOTE TO THE USER: you can override these defaults by providing
@@ -123,6 +123,48 @@
 \newblock
 
 
+\bibitem[{European Parliament and Council of the European Union}(2016)]%
+        {gdpr2016}
+\bibfield{author}{\bibinfo{person}{{European Parliament and Council of the
+  European Union}}.} \bibinfo{year}{2016}\natexlab{}.
+\newblock \bibinfo{title}{{General Data Protection Regulation (GDPR)}}.
+\newblock \bibinfo{howpublished}{Official Journal of the European Union}.
+\newblock
+\urldef\tempurl%
+\url{https://eur-lex.europa.eu/eli/reg/2016/679/oj}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{Regulation (EU) 2016/679}.
+
+
+\bibitem[{European Union}(2022)]%
+        {nis2024}
+\bibfield{author}{\bibinfo{person}{{European Union}}.}
+  \bibinfo{year}{2022}\natexlab{}.
+\newblock \bibinfo{title}{{Directive (EU) 2022/2555 of the European Parliament
+  and of the Council of 14 December 2022 on measures for a high common level of
+  cybersecurity across the Union (NIS2 Directive)}}.
+\newblock \bibinfo{howpublished}{Official Journal of the European Union, L 333,
+  pp. 80--152}.
+\newblock
+\urldef\tempurl%
+\url{https://eur-lex.europa.eu/eli/dir/2022/2555/oj}
+\showURL{%
+\tempurl}
+
+
+\bibitem[{IEEE Computer Society}(1999)]%
+        {IEEECODE}
+\bibfield{author}{\bibinfo{person}{{IEEE Computer Society}}.}
+  \bibinfo{year}{1999}\natexlab{}.
+\newblock \bibinfo{title}{{Code of Ethics}}.
+\newblock \bibinfo{howpublished}{IEEE}.
+\newblock
+\newblock
+\shownote{\url{https://www.computer.org/education/code-of-ethics}}.
+
+
 \bibitem[Li and Su(2023)]%
         {Li:Finding}
 \bibfield{author}{\bibinfo{person}{Shaohua Li} {and} \bibinfo{person}{Zhendong
@@ -139,6 +181,24 @@
 \urldef\tempurl%
 \url{https://doi.org/10.1145/3582016.3582053}
 \showDOI{\tempurl}
+
+
+\bibitem[Lin et~al\mbox{.}(2024)]%
+        {Lin:CAMP}
+\bibfield{author}{\bibinfo{person}{Zhenpeng Lin}, \bibinfo{person}{Zheng Yu},
+  \bibinfo{person}{Ziyi Guo}, \bibinfo{person}{Simone Campanoni},
+  \bibinfo{person}{Peter Dinda}, {and} \bibinfo{person}{Xinyu Xing}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{{CAMP}: Compiler and Allocator-based Heap Memory
+  Protection}. In \bibinfo{booktitle}{\emph{33rd USENIX Security Symposium
+  (USENIX Security 24)}}. \bibinfo{publisher}{USENIX Association},
+  \bibinfo{address}{Philadelphia, PA}, \bibinfo{pages}{4015--4032}.
+\newblock
+\showISBNx{978-1-939133-44-1}
+\urldef\tempurl%
+\url{https://www.usenix.org/conference/usenixsecurity24/presentation/lin-zhenpeng}
+\showURL{%
+\tempurl}
 
 
 \bibitem[Monniaux(2024)]%
@@ -169,6 +229,21 @@
 \url{https://www.usenix.org/conference/atc12/technical-sessions/presentation/serebryany}
 \showURL{%
 \tempurl}
+
+
+\bibitem[{U.S. Congress}(2024)]%
+        {apra2024}
+\bibfield{author}{\bibinfo{person}{{U.S. Congress}}.}
+  \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{{American Privacy Rights Act of 2024}}.
+\newblock \bibinfo{howpublished}{H.R.8818, 118th Congress, 2nd session}.
+\newblock
+\urldef\tempurl%
+\url{https://www.congress.gov/bill/118th-congress/house-bill/8818}
+\showURL{%
+\tempurl}
+\newblock
+\shownote{Introduced in House on June 25, 2024}.
 
 
 \bibitem[Wang et~al\mbox{.}(2013)]%

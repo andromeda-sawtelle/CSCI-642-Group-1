@@ -29,45 +29,45 @@ Warning--no key, author in AppleSecurity
 Warning--empty organization in AppleSecurity
 Warning--empty organization in AppleSecurity
 Warning--empty organization in AddressSanitizeWiki
-You've used 11 entries,
+You've used 16 entries,
             5981 wiz_defined-function locations,
-            1560 strings with 20326 characters,
-and the built_in function-call counts, 10753 in all, are:
-= -- 1150
-> -- 239
+            1594 strings with 21495 characters,
+and the built_in function-call counts, 15138 in all, are:
+= -- 1644
+> -- 362
 < -- 0
-+ -- 78
-- -- 89
-* -- 687
-:= -- 970
-add.period$ -- 50
-call.type$ -- 11
-change.case$ -- 63
-chr.to.int$ -- 11
-cite$ -- 37
-duplicate$ -- 1104
-empty$ -- 755
-format.name$ -- 109
-if$ -- 2524
++ -- 113
+- -- 135
+* -- 964
+:= -- 1425
+add.period$ -- 78
+call.type$ -- 16
+change.case$ -- 93
+chr.to.int$ -- 16
+cite$ -- 42
+duplicate$ -- 1518
+empty$ -- 1048
+format.name$ -- 159
+if$ -- 3504
 int.to.chr$ -- 2
 int.to.str$ -- 1
-missing$ -- 29
-newline$ -- 149
-num.names$ -- 63
-pop$ -- 450
+missing$ -- 34
+newline$ -- 211
+num.names$ -- 98
+pop$ -- 585
 preamble$ -- 1
-purify$ -- 146
+purify$ -- 216
 quote$ -- 0
-skip$ -- 461
+skip$ -- 628
 stack$ -- 0
-substring$ -- 754
-swap$ -- 136
+substring$ -- 1089
+swap$ -- 169
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 330
+type$ -- 480
 warning$ -- 18
-while$ -- 59
+while$ -- 93
 width$ -- 0
-write$ -- 277
+write$ -- 396
 (There were 18 warnings)
