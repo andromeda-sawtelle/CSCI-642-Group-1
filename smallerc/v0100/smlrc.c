@@ -1,4 +1,5 @@
 /*
+
 Copyright (c) 2012-2020, Alexey Frunze
 All rights reserved.
 
@@ -668,6 +669,10 @@ int CurFxnReturnExprTypeSynPtr = 0;
 int CurFxnEpilogLabel = 0;
 
 char* CurFxnName = NULL;
+char* identGlobal = NULL;
+char* poisonedIdents[1024];
+int poisonedIndex = 0;
+char prevUnaryStar = 0;
 #ifndef NO_FUNC_
 int CurFxnNameLabel = 0;
 #endif
@@ -3624,8 +3629,24 @@ int exprval(int* idx, int* ExprTypeSynPtr, int* ConstExpr)
   // Identifiers
   case tokIdent:
     {
+      char toPoison = 0;
+      if(identGlobal != NULL && strcmp(identGlobal, "free") == 0) {
+        toPoison = 1;
+      }
       // DONE: support __func__
       char* ident = IdentTable + s;
+      if(toPoison) {
+        poisonedIdents[poisonedIndex] = ident;
+        poisonedIndex++;
+      }
+      if(prevUnaryStar) {
+        for(int i = 0; i < poisonedIndex; i++) {
+          if(strcmp(ident, poisonedIdents[i]) == 0) {
+            error("ident: %s is poisoned\n", ident);
+          }
+        }
+      }
+      identGlobal = ident;
       int synPtr, type;
 #ifndef NO_FUNC_
       if (CurFxnName && !strcmp(ident, "__func__"))
@@ -3920,8 +3941,9 @@ int exprval(int* idx, int* ExprTypeSynPtr, int* ConstExpr)
 
   // Indirection unary operator
   case tokUnaryStar:
+    prevUnaryStar = 1;
     exprval(idx, ExprTypeSynPtr, ConstExpr);
-
+    prevUnaryStar = 0;
     if (*ExprTypeSynPtr < 0 || SyntaxStack0[*ExprTypeSynPtr] == '*')
     {
       // type is a pointer to something,
@@ -4905,11 +4927,9 @@ int exprval(int* idx, int* ExprTypeSynPtr, int* ConstExpr)
       int retOfs = 0;
 #endif
       exprval(idx, ExprTypeSynPtr, ConstExpr);
-
       if (!GetFxnInfo(*ExprTypeSynPtr, &minParams, &maxParams, ExprTypeSynPtr, &firstParamSynPtr))
         //error("exprval(): function or function pointer expected\n");
         errorOpType();
-
       // DONE: validate the number of function arguments
       // DONE: warnings on int<->pointer substitution in params/args
 
@@ -10026,6 +10046,10 @@ int main(int argc, char** argv)
   if (warnings && warnCnt)
     printf("%d warnings\n", warnCnt);
   GenStartCommentLine(); printf2("Compilation succeeded.\n");
+  
+  for( int i = 0; i < poisonedIndex; i++) {
+    printf("ident %d: %s\n", i, poisonedIdents[i]);
+  }
 
   if (OutFile)
     fclose(OutFile);
