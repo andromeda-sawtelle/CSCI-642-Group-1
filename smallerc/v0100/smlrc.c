@@ -670,8 +670,8 @@ int CurFxnEpilogLabel = 0;
 
 char* CurFxnName = NULL;
 char* identGlobal = NULL;
-char* poisonedIdents[1024];
-int poisonedIndex = 0;
+char* poisonedIdents[32][1024];
+int poisonedIndex[32];
 char prevUnaryStar = 0;
 #ifndef NO_FUNC_
 int CurFxnNameLabel = 0;
@@ -3636,14 +3636,16 @@ int exprval(int* idx, int* ExprTypeSynPtr, int* ConstExpr)
       // DONE: support __func__
       char* ident = IdentTable + s;
       if(toPoison) {
-        poisonedIdents[poisonedIndex] = ident;
-        poisonedIndex++;
+        poisonedIdents[ParseLevel][poisonedIndex[ParseLevel]] = ident;
+        poisonedIndex[ParseLevel]++;
       }
       if(prevUnaryStar) {
-        for(int i = 0; i < poisonedIndex; i++) {
-          if(strcmp(ident, poisonedIdents[i]) == 0) {
-            error("ident: %s is poisoned\n", ident);
-          }
+        for(int j = ParseLevel; j >= 0; j--) {
+            for(int i = 0; i < poisonedIndex[ParseLevel]; i++) {
+              if(strcmp(ident, poisonedIdents[ParseLevel][i]) == 0) {
+                error("ident: %s is poisoned\n", ident);
+              }
+            }
         }
       }
       identGlobal = ident;
@@ -10047,8 +10049,10 @@ int main(int argc, char** argv)
     printf("%d warnings\n", warnCnt);
   GenStartCommentLine(); printf2("Compilation succeeded.\n");
   
-  for( int i = 0; i < poisonedIndex; i++) {
-    printf("ident %d: %s\n", i, poisonedIdents[i]);
+  for(int j = 0; j < 32; j++) {
+      for( int i = 0; i < poisonedIndex[j]; i++) {
+        printf("ident %d/%d: %s\n", j, i, poisonedIdents[j][i]);
+      }
   }
 
   if (OutFile)
