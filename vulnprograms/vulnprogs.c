@@ -12,7 +12,7 @@ void printIntegers(int *integers, int count)
     printf("\n");
 }
 
-int useAfterFree(int count) 
+int useAfterFree(int count, int read) 
 {
     printf("Use After Free\n");
 
@@ -42,7 +42,9 @@ int useAfterFree(int count)
     // This is our data (plus a bit more) after a
     // second free.
     printf("\tMalicious Print\n");
-    printIntegers(someInts, count + 4);
+    printIntegers(someInts, count + read);
+
+    return 0;
 }
 
 int bufferOverrun(int count, int overrun) 
@@ -54,16 +56,24 @@ int bufferOverrun(int count, int overrun)
         someInts[i] = 8 * i;
 
     printIntegers(someInts, count + overrun);
+
+    return 0;
 }
 
 int improperSynchronization() 
 {
-    // TODO:
+    // TODO: Figure out how to do multithreading in Smaller C
+    // Note – actively not supported
 
+    return 0;
 }
 
 enum mode {
-    UAF, BO, IS, HELP, NONE
+    UAF,
+    BO, 
+    IS, 
+    HELP, 
+    NONE
 };
 
 int validArgs(char *firstArg) 
@@ -72,7 +82,7 @@ int validArgs(char *firstArg)
     return validArg;
 }
 
-enum mode chooseMode(int argc, char *argv[])
+enum mode selectMode(int argc, char *argv[])
 {
     char *firstArg = argv[1];
     if (!validArgs(firstArg))
@@ -102,7 +112,7 @@ void help()
 Usage: vulnprog <-u|-b|-i|-h> <count> <count2>\n\
     -u: runs a Use After Free exploit test\n\
     -b: runs a Buffer Overrun exploit test\n\
-    -i: runs an Improper Synchronization exploit test\n\
+    -i: runs an Improper Synchronization exploit test (not working)\n\
     -h: show this help screen\n\
     count: an integer representing the number of entries to test.\n\
         Defaults to 8.\n\
@@ -120,7 +130,7 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    enum mode exploit = chooseMode(argc, argv);
+    enum mode exploit = selectMode(argc, argv);
 
     if (exploit == HELP) {
         help();
@@ -137,13 +147,14 @@ int main(int argc, char *argv[])
     int usedWrong = 0;
     switch (exploit) {
     case UAF:
-        useAfterFree(count);
+        return useAfterFree(count, count2);
         break;
     case BO:
-        bufferOverrun(count, count2);
+        return bufferOverrun(count, count2);
         break;
     case IS:
-
+        printf("improper synchronization is not implemented");
+        help();
         break;
     }
 

@@ -19,9 +19,9 @@
 
 \lstset{
   language=C,
-  numbers=left,
-  stepnumber=1,        
-  numbersep=5pt,
+%  numbers=left,
+%  stepnumber=1,        
+%  numbersep=5pt,
 %  backgroundcolor=\color{white},
   showspaces=false,
   showstringspaces=false,
@@ -50,7 +50,7 @@ This paper investigates a few methods to catch memory safety violations to see i
 
 \end{abstract}
 
-\keywords{Compiler, Security, Single-Pass Compiler, C, C++, Use-After-Free, Out-Of-Bounds, Memory Safety, Stack-Smashing}
+\keywords{Compiler, Security, Single-Pass Compiler, C, C++, Use-After-Free, Out-Of-Bounds, Memory Safety, Stack-Smashing, Smaller C, GCC, Clang, LLVM, Pointers, Address Sanitization, Improper Synchronization, Compiler Design, Pointer Tagging, Software Engineering, ACM, GDPR, APRA, NIS2}
 
 \maketitle
 
@@ -139,7 +139,10 @@ A third lesson learned from this project is that it is important to understand t
 
 \subsection{Future Work}
 
-Developers should not spend too much time attempting to add security features to Smaller C, or any other single pass compiler. Smaller C was written by a single developer as a learning experience, and should not be used or examined further. There is already much work being done to improve the security of other C compilers, as there should be. More effort should be spent improving the memory safety of those tools. Another interesting area for research would be thoroughly reviewing and analyzing the memory safety features of GCC or Clang. In particular, a comprehensive report that clearly and concisely describes the limitations, vulnerabilities, and necessary compiler flags for security would be very interesting, and likely helpful for most developers.
+Developers should not spend too much time attempting to add security features to Smaller C, or any other single pass compiler. Smaller C was written by a single developer as a learning experience, and should not be used or examined further. There is already much work being done to improve the security of other C compilers, as there should be. More effort should be spent improving the memory safety of those tools. Another interesting area for research would be thoroughly reviewing and analyzing the memory safety features of GCC or Clang. In particular, a comprehensive report that clearly and concisely describes the limitations, vulnerabilities, and necessary compiler flags for security would be very interesting, and likely helpful for most developers. 
+
+Another possible area for research would be reducing the overhead for currently existing compiler memory safety features. Many compiler flags that add significant memory security are disabled by default in GCC and Clang because they impose a significant overhead on the program. This is very similar to the address sanitization procedure that this project implemented into Smaller C. By reducing the overhead of these security features, it increases the likelihood that they would be adopted for use by more developers, improving the security of their code. In fact, if the overhead was reduced enough, these features could be enabled by default, so that all code compiled would be more secure.
+
 
 
 \section{Legal Considerations}
@@ -147,9 +150,9 @@ Developers should not spend too much time attempting to add security features to
 
 As laws regarding computing security and secure coding generally become more prevalent, it is imperative that organizations that distribute software ensure that their programs are secure and minimize common security vulnerabilities. Making informed decisions about which compiler to use and leveraging the security features inherent to that compiler are essential considerations that are often overlooked. Software integrated into vital parts of society, including healthcare and finance, are subject to increasingly strict regulations by bodies such as the European Union, which implemented the General Data Protection Regulation in 2016\cite{gdpr2016} and came into effect two years later. Due to the privacy concerns for users that sparked GDPR, secure coding is a necessary extension of the conclusions present in the law.
 
-The GDPR emphasizes the protection of personal data and mandates organizations to implement appropriate technical measures to ensure data protection and security. This includes the need for secure coding practices to prevent data breaches that compromise personal information. Compilers have the capacity to improve or worsen the security of a given piece of software, through checking or lack thereof, and should be considered essential to the understanding of secure code as defined by regulations such as the GDPR. By enforcing strict penalties on non-compliance, GDPR incentivizes organizations to prioritize security in development. In the United States, the introduction of the American Privacy Rights Act (APRA)\cite{apra2024} in 2024 signifies a greater move towards regulating and strengthening laws surrounding data protection and cybersecurity. APRA aims to provide comprehensive protection to individuals and imposes strict obligations on how organizations are allowed to handle personal data, including mandates for robust security measures. This development emphasizes the importance of secure coding practices in preventing data breaches and unauthorized access.
+The GDPR emphasizes the protection of personal data and mandates organizations to implement appropriate technical measures to ensure data protection and security. This includes the need for secure coding practices to prevent data breaches that compromise personal information. Compilers have the capacity to improve or worsen the security of a given piece of software, through checking or lack thereof, and should be considered essential to the understanding of secure code as defined by regulations such as the GDPR. By enforcing strict penalties on non-compliance, GDPR incentivizes organizations to prioritize security in development. In the United States, the introduction of the American Privacy Rights Act (APRA) in 2024 signifies a greater move towards regulating and strengthening laws surrounding data protection and cybersecurity\cite{apra2024}. APRA aims to provide comprehensive protection to individuals and imposes strict obligations on how organizations are allowed to handle personal data, including mandates for robust security measures. This development emphasizes the importance of secure coding practices in preventing data breaches and unauthorized access.
 
-More recent laws have also been passed in response to increasingly sophisticated cyber-attacks across the world, including ransomware in critical sectors of society. Similarly in the EU, the NIS2 Directive\cite{nis2024} mandates a basic level of security required by software developers in all member states. Addressing the surge of cyber-attacks, it urges member states to pass swift and harsh legislation on organizations that violate security practices, and encourage the adoption of secure practices in their software development processes.
+More recent laws have also been passed in response to increasingly sophisticated cyber-attacks across the world, including ransomware in critical sectors of society. Similarly in the EU, the NIS2 Directive mandates a basic level of security required by software developers in all member states\cite{nis2024}. Addressing the surge of cyber-attacks, it urges member states to pass swift and harsh legislation on organizations that violate security practices, and encourage the adoption of secure practices in their software development processes.
 
 These regulatory developments highlight a global trend toward enforcing higher standards of cybersecurity and data protection. However, mandating the use or adoption of specific compilers could be fraught, as organizations with a vested interest in undermining the security of software could theoretically implement backdoors or security flaws into compilers without the knowledge of users. Therefore, it is important to understand what limitations should exist for regulations and legislation passed by governing bodies when it comes to limiting the freedom of organizations to develop without undue burdens, while also ensuring the code those organizations create is suitably protected from cyber-attacks and with penalties for non-cooperation.
 
@@ -159,21 +162,31 @@ These regulatory developments highlight a global trend toward enforcing higher s
 
 The ACM code of ethics has a few relevant sections when it comes to memory safety vulnerabilities in compilers~\cite{ACMCODE}.
 
-Code 1.2: “Avoid harm” is relevant to the designer of the compiler, as well as software developers who use it. Memory security vulnerabilities can cause software to stop working suddenly, which could cause loss of life if a hospital suddenly was unable to care for patients. Additionally, hackers can take control of programs with memory security vulnerabilities. This could be dangerous, if for example, they got control of an application that controlled a defensive military installation and prevented it from intercepting missiles. As such, a compiler writer wants to ensure that their compiler will prevent memory vulnerabilities, and developers want to write code that prevents them. 
+\begin{itemize}
 
-Another relevant section is Code 1.3: “Be honest and trustworthy.” A compiler should not misrepresent the extent to which it prevents or detects memory safety vulnerabilities, or a developer might unintentionally release a program that is unsafe. 
+\item \textbf{Code 1.2: “Avoid harm”} This is relevant to the designer of the compiler, as well as software developers who use it. Memory security vulnerabilities can cause software to stop working suddenly, which could cause loss of life if a hospital suddenly was unable to care for patients. Additionally, hackers can take control of programs with memory security vulnerabilities. This could be dangerous, if for example, they got control of an application that controlled a defensive military installation and prevented it from intercepting missiles. As such, a compiler writer wants to ensure that their compiler will prevent memory vulnerabilities, and developers want to write code that prevents them. 
 
-On the same note, Code 2.7: “Foster public awareness and understanding of computing, related technologies, and their consequences” requires that a compiler vendor explain the importance of vulnerabilities that may not be caught, and should also put forward methods to prevent issues that could make it through to compile time. 
+\item \textbf{Code 1.3: “Be honest and trustworthy”} A compiler should not misrepresent the extent to which it prevents or detects memory safety vulnerabilities, or a developer might unintentionally release a program that is unsafe. 
 
-Code 2.9: “Design and implement systems that are robustly and usably secure” is also relevant. As discussed previously, some compilers may optimize code in a way that introduces security vulnerabilities, which violates this principle. Developers should also be wary of using compilers that do not guarantee memory safety, since releasing any insecure product is a violation of this code. 
+\item \textbf{Code 2.7: “Foster public awareness and understanding of computing, related technologies, and their consequences”} This section similarly mandates that a compiler vendor explain the importance of vulnerabilities that may not be caught, and should also put forward methods to prevent issues that could make it through to compile time. 
 
-Code 3.7: “Recognize and take special care of systems that become integrated into the infrastructure of society” can be relevant for any compilers that aim to be used by any IDE. It is the responsibility of large developer tools producers to ship compilers that come packaged with their code environments, such as Visual Studio by Microsoft, that are memory safe by default, since many developers use that compiler without ever thinking about it. Since a compiler is a tool used by other developers, creating an insecure compiler can have a knock on effect that results in widespread vulnerabilities. Thus, it is very important for compilers to enforce memory safety wherever possible as an ethical duty to the developers who use them.
+\item \textbf{Code 2.9: “Design and implement systems that are robustly and usably secure”} As discussed previously, some compilers may optimize code in a way that introduces security vulnerabilities, which violates this principle. Developers should also be wary of using compilers that do not guarantee memory safety, since releasing any insecure product is a violation of this code. 
+
+\item \textbf{Code 3.7: “Recognize and take special care of systems that become integrated into the infrastructure of society”} This can be pertinent for any compilers that aim to be used by an IDE. It is the responsibility of large developer tools producers to ship compilers that come packaged with their code environments, such as Visual Studio by Microsoft, that are memory safe by default, since many developers use that compiler without ever thinking about it. Since a compiler is a tool used by other developers, creating an insecure compiler can have a knock on effect that results in widespread vulnerabilities. Thus, it is very important for compilers to enforce memory safety wherever possible as an ethical duty to the developers who use them.
+
+\end{itemize}
 
 A similar code of conduct is the IEEE CS Code of Ethics, which focuses on the role of software engineers in the world~\cite{IEEECODE}. The role of this code of ethics mirrors much of what the ACM code of ethics aims to achieve. The 8 general principles are public, client and employer, product, judgment, management, profession, colleagues, and self. 
 
-Code 1.03. “Approve software only if they have a well-founded belief that it is safe, meets specifications, passes appropriate tests, and does not diminish quality of life, diminish privacy or harm the environment. The ultimate effect of the work should be to the public good” covers much of what code 1.2 does for the ACM code of ethics. A memory vulnerability in a critical piece of software can cause immeasurable harm, as stated above possibly can even cost a life. That’s why it is imperative to uphold this code. 
+\begin{itemize}
 
-Another code in IEEE CS code of ethics is code 3.10 “Ensure adequate testing, debugging, and review of software and related documents on which they work” which is important when it comes to the security of any given software, but even more so when it comes to compilers. A compiler is something most programmers depend on to build their code, and it's paramount that a compiler is thoroughly tested to find any insecure parts to fix. Code 6.08 “Take responsibility for detecting, correcting, and reporting errors in software and associated documents on which they work” is also important when it comes to the security of compilers. Unchecked errors can, such as UAF or out-of-bounds, can cause important systems to fail.
+\item \textbf{Code 1.03 “Approve software only if they have a well-founded belief that it is safe, meets specifications, passes appropriate tests, and does not diminish quality of life, diminish privacy or harm the environment. The ultimate effect of the work should be to the public good”} covers much of what Code 1.2 does for the ACM Code of Ethics. A memory vulnerability in a critical piece of software can cause immeasurable harm, as stated above possibly can even cost a life. That’s why it is imperative to uphold this code. 
+
+\item \textbf{Code 3.10 “Ensure adequate testing, debugging, and review of software and related documents on which they work”} This code is important when it comes to the security of any piece of software, but even more so when it comes to compilers. A compiler is something programmers depend on to build their code, and it's paramount that a compiler is thoroughly tested to find any insecure parts to fix. 
+
+\item \textbf{Code 6.08 “Take responsibility for detecting, correcting, and reporting errors in software and associated documents on which they work”} This code is also important when it comes to the security of compilers. Unchecked errors, such as UAF or out-of-bounds, can cause important systems to fail. Engineers who rely on compilers in order to prevent these types of errors from occurring can be put at risk by a compiler developer who neglects this duty.
+
+\end{itemize}
 
 \section{Conclusions}
 \label{conclusions}
