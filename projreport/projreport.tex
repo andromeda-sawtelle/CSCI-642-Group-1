@@ -54,7 +54,6 @@ This paper investigates a few methods to catch memory safety violations to see i
 
 \maketitle
 
-
 \section{Overview}
 \label{motivation}
 
@@ -104,7 +103,6 @@ Smaller C is vulnerable to stack smashing attacks, since it has no protections i
 
 Another idea would be to modify the compilation step of Smaller C to artificially generate and insert a canary into code. When it parses the start of a function, it could add code to initialize a variable that holds a random value and copy that value into a global array. When Smaller C parses the end of a function, before adding the end of function code, it could compare the value in the global array to the canary. In the case of a change, the program would be terminated. Unfortunately, there is no way to guarantee that this variable would be anywhere near the return address, making it rather useless. Additionally, this would necessarily add a reserved variable name, which would mean that programs that used that name could not compile. Finally, requiring every program to reserve space for an array equal to the maximum function call depth seems undesirable. While this would theoretically work and have a chance to prevent some stack smashing attacks, it would also prevent a number of valid programs from compiling. In conclusion, while canaries can be implemented in a single pass compiler, they are not able to be implemented in a useful way in Smaller C.
 
-
 \lstinputlisting{genfxnepilog.c}
 
 The next fix proposed for the Smaller C compiler is adding memory address sanitization. This is a method of checking code on compile time for errors like buffer overflow and UAF. This is generally done by adding marks to memory addresses. These are either adding 32 byte aligned poisoned “redzones” before and after contiguous areas of memory, and poison tags when a memory address has been freed~\cite{AddressSanitizeWiki}. The redzone allows checks to be made if any access to memory is in one of these zones, and an error can be thrown and the compiler stopped. The poison tags for freeing equate to an if statement before any dereference of memory to check if that address has been poisoned. Both of these implementations heavily make use of the ShadowStack~\cite{Serebryany:AddressSanitize}. To implement these poison checks for Smaller C there need to be changes made to how it evaluates expressions. When a call to free() has been made, it can be assumed that the next symbol evaluated will be the name of the pointer that is freed. So a flag is raised that will log the pointer name in a table for poisoned pointers. This is currently implemented as a fixed length 2D array, where one dimension is the parse level, or scope, and the other dimension holds the poisoned pointers. Later implementations can make this also dynamically allocated to conserve memory. Then also during evaluation when a dereference is made it will check the name of the pointer to the table, with the matching parse level to account for variables that would be out of scope. If the pointer is in the poisoned table, then the compiler errors out and stops execution.
@@ -139,11 +137,9 @@ A third lesson learned from this project is that it is important to understand t
 
 \subsection{Future Work}
 
-Developers should not spend too much time attempting to add security features to Smaller C, or any other single pass compiler. Smaller C was written by a single developer as a learning experience, and should not be used or examined further. There is already much work being done to improve the security of other C compilers, as there should be. More effort should be spent improving the memory safety of those tools. Another interesting area for research would be thoroughly reviewing and analyzing the memory safety features of GCC or Clang. In particular, a comprehensive report that clearly and concisely describes the limitations, vulnerabilities, and necessary compiler flags for security would be very interesting, and likely helpful for most developers. 
+Developers should not spend too much time attempting to add security features to Smaller C, or any other single pass compiler. If, for some reason, a program exists that can only be compiled via a single pass compiler, then work should be done to implement security features into RetroBSD, which seems to be performing the code generation for Smaller C. Canaries could probably be implemented into this software, which would prevent overflow attacks. Smaller C was written by a single developer as a learning experience, and should not be used or examined further. There is already much work being done to improve the security of other C compilers, as there should be. More effort should be spent improving the memory safety of those tools. Another interesting area for research would be thoroughly reviewing and analyzing the memory safety features of GCC or Clang. In particular, a comprehensive report that clearly and concisely describes the limitations, vulnerabilities, and necessary compiler flags for security would be very interesting, and likely helpful for most developers. 
 
 Another possible area for research would be reducing the overhead for currently existing compiler memory safety features. Many compiler flags that add significant memory security are disabled by default in GCC and Clang because they impose a significant overhead on the program. This is very similar to the address sanitization procedure that this project implemented into Smaller C. By reducing the overhead of these security features, it increases the likelihood that they would be adopted for use by more developers, improving the security of their code. In fact, if the overhead was reduced enough, these features could be enabled by default, so that all code compiled would be more secure.
-
-
 
 \section{Legal Considerations}
 \label{legal considerations}
@@ -155,7 +151,6 @@ The GDPR emphasizes the protection of personal data and mandates organizations t
 More recent laws have also been passed in response to increasingly sophisticated cyber-attacks across the world, including ransomware in critical sectors of society. Similarly in the EU, the NIS2 Directive mandates a basic level of security required by software developers in all member states\cite{nis2024}. Addressing the surge of cyber-attacks, it urges member states to pass swift and harsh legislation on organizations that violate security practices, and encourage the adoption of secure practices in their software development processes.
 
 These regulatory developments highlight a global trend toward enforcing higher standards of cybersecurity and data protection. However, mandating the use or adoption of specific compilers could be fraught, as organizations with a vested interest in undermining the security of software could theoretically implement backdoors or security flaws into compilers without the knowledge of users. Therefore, it is important to understand what limitations should exist for regulations and legislation passed by governing bodies when it comes to limiting the freedom of organizations to develop without undue burdens, while also ensuring the code those organizations create is suitably protected from cyber-attacks and with penalties for non-cooperation.
-
 
 \section{Ethical Considerations}
 \label{ethical considerations}
@@ -194,7 +189,6 @@ A similar code of conduct is the IEEE CS Code of Ethics, which focuses on the ro
 Reading over and understanding a program like Smaller C, in which all functions are static and have hundreds of side effects is difficult. As such, a majority of progress up until this point has been spent analyzing the program execution and figuring out how everything interacts. In the future, we intend to implement more programs to show vulnerabilities that pass, and finish implementing more fixes to reduce the prevalence of memory vulnerabilities in Smaller C. 
 
 We do not recommend using Smaller C to compile any program intended for serious use: Smaller C was a hobby project and is not able to perform any of the security or optimization tasks that we expect a compiler to do. Its lack of disclosure about security vulnerabilities should be an indicator to any user, as with any other comparable compiler, that code that may otherwise be memory safe or checked for its memory safety will not have the same properties or expectations with this compiler.
-
 
 \begin{comment}
 Also, discuss what further directions your work can be taken by
@@ -306,8 +300,6 @@ compiled correctly:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% DELETE UNTIL HERE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{projreport} 
