@@ -4,7 +4,7 @@ Gerrit Krot
 	Investigated and attempted implementation of Canaries. Removed code from final submissions, since it did not work. Also wrote documentation for how the compiler worked.
 
 Andromeda Sawtelle
-	
+	Worked on and implemented the address sanitizer to check for use after free bugs
 
 Simon Adler
 	Investigated synchronization and issues in code generation. Wrote a script to ceck for various memory safety violations.
